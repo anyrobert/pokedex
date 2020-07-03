@@ -27,13 +27,14 @@ const PokemonContextProvider = ({ children }: Props): JSX.Element => {
   const [pokemonsContextState, setPokemons] = useState<Context>(initialState);
 
   useEffect(() => {
-    AsyncStorage.getItem('pokedex@pokemons').then((pokemons) => {
+    AsyncStorage.getItem('pokedex@pokemons').then((storedPokemons) => {
       // value previously stored
-      if (pokemons && pokemonsContextState.pokemons.length < 1) {
-        setPokemons({ pokemons: JSON.parse(pokemons), isLoading: false });
+      if (storedPokemons && pokemonsContextState.pokemons.length < 1) {
+        setPokemons({ pokemons: JSON.parse(storedPokemons), isLoading: false });
       }
-      if (!pokemons && pokemonsContextState.pokemons.length < 1) {
-        fetchKantoPokemon().then((pokemons) => {
+      if (!storedPokemons && pokemonsContextState.pokemons.length < 1) {
+        fetchKantoPokemon().then((response) => {
+          const { pokemons } = response;
           setPokemons({ pokemons, isLoading: false });
           AsyncStorage.setItem('pokedex@pokemons', JSON.stringify(pokemons));
         });

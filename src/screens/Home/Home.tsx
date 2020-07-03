@@ -23,6 +23,7 @@ type Props = {
 const Home = ({ navigation }: Props) => {
   const { pokemons, isLoading } = useContext(PokemonContext);
   const [search, setSearch] = useState('');
+
   return (
     <View style={styles.container}>
       {Platform.OS === 'ios' ? (
@@ -31,7 +32,7 @@ const Home = ({ navigation }: Props) => {
         <StatusBar barStyle="dark-content" backgroundColor="#fff" />
       )}
       <TextInput
-        placeholder="Pesquise algum Pokemon"
+        placeholder="Pesquise algum Pokémon"
         value={search}
         onChangeText={setSearch}
       />
@@ -51,18 +52,20 @@ const Home = ({ navigation }: Props) => {
           }
           numColumns={2}
           renderItem={({ item }) => {
-            const { name, image, color } = item;
+            const { name, image, color, type } = item;
             return (
-              <View style={{ flex: 0.5 }}>
+              <View style={styles.pokemonContainer}>
                 <TouchableOpacity
-                  onPress={() => {
-                    navigation.push('Pokemon', item);
-                  }}
+                  onPress={() => navigation.push('Pokemon', item)}
                   style={{ ...styles.pokemonBlock, backgroundColor: color }}>
                   <View>
-                    <Text style={styles.pokemonName}>{name}</Text>
+                    <View>
+                      <Text style={styles.pokemonName}>{name}</Text>
+                    </View>
+                    <View>
+                      <Text style={styles.pokemonName}>{type}</Text>
+                    </View>
                   </View>
-
                   <Image source={{ uri: image }} style={styles.pokemonImage} />
                 </TouchableOpacity>
               </View>
@@ -81,6 +84,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+  },
+  pokemonContainer: {
+    flex: 0.5,
   },
   pokemonBlock: {
     flex: 1,
